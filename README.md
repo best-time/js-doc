@@ -1,5 +1,5 @@
 如果愿意的话，也可以指定与默认 rollup.config.js 文件不同的配置文件：
-
+```
 rollup --config rollup.config.dev.js
 rollup --config rollup.config.prod.js
 
@@ -20,3 +20,4 @@ rollup --config rollup.config.prod.js
 --banner                    在打包好的文件的块的外部(wrapper外部)的最顶部插入一段内容
 --footer                    在打包好的文件的块的外部(wrapper外部)的最底部插入一段内容
 --interop                   包含公共的模块（这个选项是默认添加的）
+```

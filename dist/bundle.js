@@ -9,7 +9,7 @@
   (global = global || self, factory(global.F = {}));
 }(this, function (exports) { 'use strict';
 
-  // aaaaa
+  // 开始注释
 
   const memory = fn => {
     let obj = {};
@@ -1980,7 +1980,7 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-  // bbb
+  // 结束注释
 
 }));
 /*
