@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swipe</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+
+    <style>
+      html,
+      body,
+      div,
+      span,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      samp,
+      small,
+      strong,
+      b,
+      i,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      table,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      footer,
+      header,
+      nav,
+      section {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+      }
+      body {
+        -webkit-text-size-adjust: none;
+        font-family: sans-serif;
+        min-height: 416px;
+      }
+      
+      html,
+      body {
+        background: #f3f3f3;
+      }
+
+
+      #mySwipe div b {
+        display: block;
+        font-weight: bold;
+        color: #14ade5;
+        font-size: 20px;
+        text-align: center;
+        margin: 10px;
+        padding: 100px 10px;
+        box-shadow: 0 1px #ebebeb;
+        background: #fff;
+        border-radius: 3px;
+        border: 1px solid;
+        border-color: #e5e5e5 #d3d3d3 #b9c1c6;
+      }
+      /* Swipe 2 required styles */
+
+      .swipe {
+        /* overflow: hidden; */
+        visibility: hidden;
+        position: relative;
+      }
+      .swipe-wrap {
+        overflow: hidden;
+        position: relative;
+      }
+      .swipe-wrap > div {
+        float: left;
+        width: 100%;
+        position: relative;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="mySwipe" class="swipe" style="max-width:500px;margin:0 auto">
+      <div class="swipe-wrap">
+        <div style="background-color: red"><b>0</b></div>
+        <div style="background-color: yellow;"><b>1</b></div>
+        <!-- <div style="background-color: blue;"><b>2</b></div>
+        <div style="background-color: maroon;"><b>3</b></div> -->
+        <!-- <div><b>4</b></div>
+        <div><b>5</b></div> -->
+        <!-- <div><b>6</b></div>
+        <div><b>7</b></div>
+        <div><b>8</b></div>
+        <div><b>9</b></div>
+        <div><b>10</b></div>
+        <div><b>11</b></div>
+        <div><b>12</b></div>
+        <div><b>13</b></div>
+        <div><b>14</b></div>
+        <div><b>15</b></div>
+        <div><b>16</b></div>
+        <div><b>17</b></div>
+        <div><b>18</b></div>
+        <div><b>19</b></div>
+        <div><b>20</b></div> -->
+      </div>
+    </div>
+
+    <div style="text-align:center;padding-top:20px;">
+      <button onclick="mySwipe.prev()">prev</button>
+      <button onclick="mySwipe.next()">next</button>
+    </div>
+
+    <script src="../dist/bundle.js"></script>
+    <script>
+      var option = {
+        // startSlide: 2,
+        // auto: 3000,
+        // continuous: true,
+        // disableScroll: true,
+        // stopPropagation: true,
+        // callback: function(index, element) {},
+        // transitionEnd: function(index, element) {}
+      }
+      var elem = document.getElementById("mySwipe");
+      window.mySwipe = F.swipe(elem, option);
+
+      // with jQuery
+      // window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
+    </script>
+  </body>
+</html>

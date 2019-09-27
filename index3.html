@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>functional</title>
+  <style>
+    body {
+      margin: 0;
+      font-size: 24;
+      font-family: sans-serif
+    }
+
+    .li-1 {
+      background: red
+    }
+
+    .li-2 {
+      background: green
+    }
+
+    .li-3 {
+      background: yellow
+    }
+
+    .li-4 {
+      background: purple
+    }
+
+    .li-0 {
+      background: gray
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <p>functional</p> -->
+  <div id="main"></div>
+  <script src="dist/bundle.js"></script>
+  <script>
+
+    var doc = document
+
+    const nodePatchTypes = {
+      CREATE: 'create node',
+      REMOVE: 'remove node',
+      REPLACE: 'replace node',
+      UPDATE: 'update node'
+    }
+    const propPatchTypes = {
+      REMOVE: 'remove prop',
+      UPDATE: 'update prop'
+    }
+
+    let state = { num: 5 };
+    let timer;
+    let preVDom;
+
+    const ATTR_KEY = '__preprops_';
+
+    let arr = [0, 1, 2, 3, 4]
+
+    function setState(newState) {
+      state = { ...state, ...newState };
+    }
+
+    function flatten(arr) {
+      return [].concat.apply([], arr);
+    }
+
+    function h(tag, props, ...children) {
+      return {
+        tag,
+        props: props || {},
+        children: flatten(children) || []
+      };
+    }
+
+    function view() {
+
+      const elm = arr.pop();
+
+      // 用于测试能不能正常删除元素
+      if (state.num !== 9) arr.unshift(elm);
+
+      // 用于测试能不能正常添加元素
+      if (state.num === 12) arr.push(9);
+
+      return {
+        tag: "div",
+        props: {},
+        children: [
+          "Hello World",
+          {
+            tag: "ul",
+            props: {},
+            // children: [{
+            //   tag: "li",
+            //   props: {
+            //     id: 1,
+            //     class: "li-1"
+            //   },
+            //   children: ["第", 1]
+            // }],
+            children: arr.map(item => (
+              {
+                tag: 'li',
+                props: { id: item, class: `li-${item}`, key: item },
+                children: [item]
+              }
+              // <li id={i} class={`li-${i}`}>
+              //   第{i * state.num}
+              // </li>
+            ))
+          }
+        ]
+      };
+    }
+
+    // 创建dom元素
+    function createElement(vdom) {
+      // 如果vdom是字符串或者数字类型，则创建文本节点，比如“Hello World”
+      if (typeof vdom === 'string' || typeof vdom === 'number') {
+        return doc.createTextNode(vdom);
+      }
+
+      const { tag, props, children } = vdom;
+      // 1. 创建元素
+      const element = doc.createElement(tag);
+      // 2. 属性赋值
+      setProps(element, props);
+      // 3. 创建子元素
+      children.map(createElement).forEach(element.appendChild.bind(element));
+
+      return element;
+    }
+
+    // 属性赋值
+    function setProps(element, props) {
+      for (let key in props) {
+        element.setAttribute(key, props[key]);
+      }
+    }
+
+    // 创建dom元素
+    function createElement(vdom) {
+      // 如果vdom是字符串或者数字类型，则创建文本节点，比如“Hello World”
+      if (typeof vdom === 'string' || typeof vdom === 'number') {
+        return doc.createTextNode(vdom);
+      }
+
+      const { tag, props, children } = vdom;
+
+      // 1. 创建元素
+      const element = doc.createElement(tag);
+
+      // 2. 属性赋值
+      setProps(element, props);
+
+      // 3. 创建子元素
+      children.map(createElement).forEach(element.appendChild.bind(element));
+
+      return element;
+    }
+
+    // 属性赋值
+    function setProps(element, props) {
+      // 属性赋值
+      element[ATTR_KEY] = props;
+
+      for (let key in props) {
+        element.setAttribute(key, props[key]);
+      }
+    }
+
+    // 比较props的变化
+    function diffProps(newVDom, element) {
+      let newProps = { ...element[ATTR_KEY] };
+      const allProps = { ...newProps, ...newVDom.props };
+
+      // 获取新旧所有属性名后，再逐一判断新旧属性值
+      let tt = Object.keys(allProps)
+      if (tt && tt.length > 0) {
+        tt.forEach((key) => {
+          const oldValue = newProps[key];
+          const newValue = newVDom.props[key];
+
+          // 删除属性
+          if (newValue == undefined) {
+            element.removeAttribute(key);
+            delete newProps[key];
+          }
+          // 更新属性
+          else if (oldValue == undefined || oldValue !== newValue) {
+            element.setAttribute(key, newValue);
+            newProps[key] = newValue;
+          }
+        })
+      }
+      // 属性重新赋值
+      element[ATTR_KEY] = newProps;
+    }
+
+
+    /**
+    将所有dom子元素分为有key和没key两组
+    遍历VD子元素，如果VD子元素有key，则去查找有key的分组；如果没key，则去没key的分组找一个类型相同的元素出来
+    diff一下，得出是否更新元素的类型
+    如果是更新元素且子元素不是原来的，则移动元素
+    最后清理删除没用上的dom子元素
+    */
+    // 比较children的变化
+    function diffChildren(newVDom, parent) {
+      // 有key的子元素
+      const nodesWithKey = {};
+      let nodesWithKeyCount = 0;
+
+      // 没key的子元素
+      const nodesWithoutKey = [];
+      let nodesWithoutKeyCount = 0;
+
+      const childNodes = parent.childNodes,
+        nodeLength = childNodes.length;
+
+
+      // 将子元素分成有key和没key两组
+      for (let i = 0; i < nodeLength; i++) {
+        const child = childNodes[i],
+          props = child[ATTR_KEY],
+          hasKey = props !== undefined && props.key !== undefined;
+
+        if (hasKey) {
+          nodesWithKey[props.key] = child;
+          nodesWithKeyCount++;
+        } else {
+          nodesWithoutKey[nodesWithoutKeyCount++] = child;
+        }
+      }
+      console.log(nodesWithKey, nodesWithoutKey, '111')
+
+      const vChildren = newVDom.children,
+        vLength = vChildren.length;
+      // 用于优化没key子元素的数组遍历
+      let min = 0;
+
+      // 遍历vdom的所有子元素
+      for (let i = 0; i < vLength; i++) {
+        let vChild = vChildren[i]
+        let vProps = vChild.props;
+        let dom;
+
+        vKey = vProps !== undefined ? vProps.key : undefined;
+        // 根据key来查找对应元素
+        if (vKey !== undefined) {
+          if (nodesWithKeyCount && nodesWithKey[vKey] !== undefined) {
+            dom = nodesWithKey[vKey];
+            nodesWithKey[vKey] = undefined;
+            nodesWithKeyCount--;
+          }
+        }
+        // 如果没有key字段，则找一个类型相同的元素出来做比较
+        else if (min < nodesWithoutKeyCount) {
+          for (let j = 0; j < nodesWithoutKeyCount; j++) {
+            const node = nodesWithoutKey[j];
+            if (node !== undefined && isSameType(node, vChild)) {
+              dom = node;
+              nodesWithoutKey[j] = undefined;
+              if (j === min) min++;
+              if (j === nodesWithoutKeyCount - 1) nodesWithoutKeyCount--;
+              break;
+            }
+          }
+        }
+
+        // diff返回是否更新元素
+        const isUpdate = diff(dom, vChild, parent);
+
+        // 如果是更新元素，且不是同一个dom元素，则移动到原先的dom元素之前
+        if (isUpdate) {
+          const originChild = childNodes[i];
+          if (originChild !== dom) {
+            parent.insertBefore(dom, originChild);
+          }
+        }
+      }
+
+      // 清理剩下的未使用的dom元素
+      if (nodesWithKeyCount) {
+        for (key in nodesWithKey) {
+          const node = nodesWithKey[key];
+          if (node !== undefined) {
+            node.parentNode.removeChild(node);
+          }
+        }
+      }
+
+      // 清理剩下的未使用的dom元素
+      while (min <= nodesWithoutKeyCount) {
+        const node = nodesWithoutKey[nodesWithoutKeyCount--];
+        if (node !== undefined) {
+          node.parentNode.removeChild(node);
+        }
+      }
+
+    }
+
+
+    function diff(dom, newVDom, parent) {
+      // 新建node
+      if (dom == undefined) {
+        parent.appendChild(createElement(newVDom));
+        return false;
+      }
+
+      // 删除node
+      if (newVDom == undefined) {
+        parent.removeChild(dom);
+        return false;
+      }
+
+      // 替换node
+      if (!isSameType(dom, newVDom)) {
+        parent.replaceChild(createElement(newVDom), dom);
+        return false;
+      }
+
+      // 更新node
+      let isElement = dom.nodeType === Node.ELEMENT_NODE
+      if (isElement) {
+        // 比较props的变化
+        diffProps(newVDom, dom);
+
+        // 比较children的变化
+        diffChildren(newVDom, dom);
+      }
+
+      return true;
+    }
+
+    // 比较元素类型是否相同
+    function isSameType(element, newVDom) {
+      const elmType = element.nodeType;
+      const vdomType = typeof newVDom;
+
+      // 当dom元素是文本节点的情况
+      let isText = elmType === Node.TEXT_NODE
+      let stringOrNum = vdomType === 'string' || vdomType === 'number'
+      let valueEqual = element.nodeValue == newVDom
+      if (isText && stringOrNum && valueEqual) {
+        return true;
+      }
+
+      // 当dom元素是普通节点的情况
+      let isElement = elmType === Node.ELEMENT_NODE
+      if (isElement) {
+        let tagEqual = element.tagName.toLowerCase() == newVDom.tag
+        if (tagEqual) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function tick(element) {
+      if (state.num > 20) {
+        clearTimeout(timer);
+        return;
+      }
+
+      const newVDom = view();
+      const dom = element.firstChild;
+
+      // 比较并更新节点
+      diff(dom, newVDom, element);
+    }
+
+    function render(element) {
+      // 初始化的VD
+      const vdom = view();
+      preVDom = vdom;
+
+      console.log('oldVDom: ', vdom);
+
+      const dom = createElement(vdom);
+      element.appendChild(dom);
+
+      // 每500毫秒改变一次state，并生成VD
+      timer = setTimeout(() => {
+        state.num += 1;
+        tick(element);
+      }, 1000);
+    }
+
+
+    var main = document.getElementById('main')
+    render(main)
+
+
+    /**
+
+    {
+        tag: "div",
+        props: {},
+        children: [
+            "Hello World",
+            {
+              tag: "ul",
+              props: {},
+              children: [{
+                  tag: "li",
+                  props: {
+                      id: 1,
+                      class: "li-1"
+                  },
+                  children: ["第", 1]
+              }]
+            }
+        ]
+    }
+
+    {
+        type, // 对应的是 DOM 元素的变化类型，有 4 种：新建、删除、替换和更新
+        vdom,
+        props: [{
+                type, // 只有2种：更新和删除
+                key,
+                value
+              }]
+        children
+    }
+     * */
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>rollup</title>
+</head>
+
+<body>
+
+  <script src="dist/bundle.js"></script>
+  <script src="./m/promise.js"></script>
+  <script src="./m/vnode.js"></script>
+  <script src="./m/render.js"></script>
+  <script src="./m/request.js"></script>
+  <script src="mithril.js"></script>
+  <script>
+    var root = document.body;
+
+    var view = m("div", {id: "test"}, "hello")
+
+    m.render(root, view)
+    // m.render(root, "Hello world")
+    
+
+    // m.render(root, "My first app")
+
+
+
+
+    // function log(...args) {
+    //   console.log(args.join(''))
+    // }
+    // new Promise(function (resolve, reject) {
+    //   var timeOut = Math.random() * 2;
+    //   log('set timeout to: ' + timeOut + ' seconds.');
+    //   setTimeout(function () {
+    //     if (timeOut < 1) {
+    //       log('resolve()...');
+    //       resolve('200 OK');
+    //     }
+    //     else {
+    //       log('reject()...');
+    //       reject('timeout in ' + timeOut + ' seconds.');
+    //     }
+    //   }, timeOut * 1000);
+    // }).then(function (r) {
+    //   log('成功: ' + r);
+    // }).catch(function (reason) {
+    //   log('失败: ' + reason);
+    // });
+
+    // 0.5秒后返回input*input的计算结果:
+    // function multiply(input) {
+    //   return new Promise(function (resolve, reject) {
+    //     log('multiply ' + input + ' x ' + input + '...');
+    //     // setTimeout(resolve, 500, input * input);
+    //     setTimeout(() => {
+    //       resolve(input * input)
+    //     }, 500)
+    //   });
+    // }
+
+    // 0.5秒后返回input+input的计算结果:
+    // function add(input) {
+    //   return new Promise(function (resolve, reject) {
+    //     log('add ' + input + ' + ' + input + '...');
+    //     setTimeout(resolve, 500, input + input);
+    //   });
+    // }
+
+    // var p = new Promise(function (resolve, reject) {
+    //   resolve(123);
+    // });
+
+    // p.then(multiply)
+    //   .then(add)
+    //   .then(multiply)
+    //   .then(add)
+    //   .then(function (result) {
+    //     log('Got value: ' + result);
+    //   });
+
+
+  </script>
+</body>
+
+</html>
