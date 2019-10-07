@@ -1,13 +1,7 @@
 var global = window || {}
 
-function debounce(fn, args, ctx) {
-  if (!fn) { return; }
-  debounce(function run() {
-    fn.apply(ctx || null, args || []);
-  });
-}
 
-var doc = global.document;
+var doc = document;
 var addEvent = addEventEasy;
 var removeEvent = removeEventEasy;
 var hardCache = [];
@@ -99,6 +93,15 @@ function find(el, type, fn) {
   }
 }
 
+// ------------------
+ 
+function debounce(fn, args, ctx) {
+  if (!fn) { return; }
+  debounce(function run() {
+    fn.apply(ctx || null, args || []);
+  });
+}
+
 
 function atoa(a, n) { return Array.prototype.slice.call(a, n); }
 
@@ -144,18 +147,10 @@ function useNative() {
   return false;
 }
 
-/**
- * Cross-browser `CustomEvent` constructor.
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
- *
- * @public
- */
-
 var eva = useNative() ? NativeCustomEvent :
-
   // IE >= 9
-  'function' === typeof document.createEvent ? function CustomEvent(type, params) {
+  'function' === typeof document.createEvent 
+  ? function CustomEvent(type, params) {
     var e = document.createEvent('CustomEvent');
     if (params) {
       e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
@@ -164,9 +159,7 @@ var eva = useNative() ? NativeCustomEvent :
     }
     return e;
   } :
-
-    // IE <= 8
-    function CustomEvent(type, params) {
+    function CustomEvent(type, params) { // IE <= 8
       var e = document.createEventObject();
       e.type = type;
       if (params) {
@@ -195,11 +188,13 @@ function emitter(thing, options) {
     }
     return thing;
   };
+  
   thing.once = function (type, fn) {
     fn._once = true; // thing.off(fn) still works!
     thing.on(type, fn);
     return thing;
   };
+
   thing.off = function (type, fn) {
     var c = arguments.length;
     if (c === 1) {
@@ -213,10 +208,12 @@ function emitter(thing, options) {
     }
     return thing;
   };
+
   thing.emit = function () {
     var args = atoa(arguments);
     return thing.emitterSnapshot(args.shift()).apply(this, args);
   };
+
   thing.emitterSnapshot = function (type) {
     var et = (evt[type] || []).slice(0);
     return function () {
@@ -234,9 +231,6 @@ function emitter(thing, options) {
 }
 
 
-
-// ---------------------
-
 var crossvent = {
   add: addEvent,
   remove: removeEvent,
@@ -246,7 +240,7 @@ var classes = {
   add: addClass,
   rm: rmClass
 };
-var doc = document;
+
 var documentElement = doc.documentElement;
 
 function dragula(initialContainers, options) {
