@@ -189,6 +189,9 @@
 
     return target;
   };
+  //   add: addClass,
+  //   rm: rmClass
+  // };
 
   var version = "1.0.0";
 
