@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>vDragger</title>
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<script type="text/javascript" src="./src/util/index.js"></script>
+
+	<style type="text/css">
+		#draggable_obj {
+			left: 0;
+			top: 0;
+		}
+		
+		#draggable_obj_2 {
+			left: 100px;
+			top: 0;
+		}
+		
+		#draggable_obj_3 {
+			left: 0;
+			top: 0;
+		}
+		
+		.draggable {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+		
+		.blue {
+			background: blue;
+			color: white;
+		}
+		
+		.red {
+			background: red;
+			color: white;
+		}
+		
+		.orange {
+			background: orange;
+			color: white;
+		}
+		
+		.box {
+			width: 50px;
+			height: 50px;
+			padding: 10px;
+			text-align: center;
+		}
+		
+		.active-box {
+			opacity: 0.5;
+			border: 1px solid #333333;
+		}
+		
+		#restrict_obj {
+			width: 300px;
+			height: 200px;
+			left: 300px;
+			border: 1px solid #ccc;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="draggable_obj" class="draggable box blue">
+		Drag Me
+	</div>
+
+	<div id="draggable_obj_2" class="draggable box red">
+		Drag Me
+	</div>
+	
+	<div id="restrict_obj">
+		<div id="draggable_obj_3" class="draggable box orange">
+			Drag Me
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var obj = document.getElementById('draggable_obj_2'),
+			obj2 = document.getElementById('draggable_obj_3');
+			
+		viiny.dragger(obj, {
+			activeClass: 'active-box',
+			snapX: 50,
+			onStop: function (e, obj) {
+				console.log(e.distanceY);
+			}
+		});
+		
+		viiny.dragger(obj2, {
+			activeClass: 'active-box',
+			restrict: document.getElementById('restrict_obj')
+    });
+    
+
+    /*
+    var obj1 = document.getElementById('drag-1'),
+    obj2 = document.getElementById('drag-2');
+		
+viiny.dragger(obj1, {
+  axisX: false
+});
+	
+viiny.dragger(obj2, {
+  axisY: false
+});
+
+
+
+
+
+viiny.dragger(obj, {
+  onStop: function (e, obj) {
+		obj.innerHTML = "Distance X: " + parseInt(e.distanceX) + "px<br /><br />" +
+		"Distance Y: " + parseInt(e.distanceY) + "px";
+  }
+});
+	
+viiny.dragger(obj2, {
+	onStart: function (e, obj) {
+		obj.style.backgroundColor = "red";
+		obj.innerHTML = "Drag started.";
+  },
+  onDrag: function (e, obj) {
+		obj.innerHTML = "ClientX: " + parseInt(e.clientX) + "px<br /><br />" +
+		"ClientY: " + parseInt(e.clientY) + "px";
+  },
+  onStop: function (e, obj) {
+		obj.style.backgroundColor = "#23527c";
+		obj.innerHTML = "Drag stoped.";
+  }
+});
+
+
+
+
+    */
+
+
+	</script>
+</body>
+
+</html>
