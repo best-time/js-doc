@@ -1,6 +1,6 @@
 import { run, debounce, throttle, memory, proxy, EventEmitter, deepCopy } from './lib'
 import { version } from '../package.json';
-console.log('version ' + version);
+// console.log('version ' + version);
 // export default function () {
 //   console.log('version ' + version);
 // }
@@ -19,6 +19,8 @@ export {store, $, swipe}
 
 // export { default as type } from './type';
 
+import S from "./Y/core"
+export { S }
 
 /**
  Bad:
@@ -69,7 +71,7 @@ function adapter(response, info) {
 
 function adapter2(response, info) {
   return Object.keys(info).reduce((res, key) => {
-    let keyArr = info[key].split('.'), 
+    let keyArr = info[key].split('.'),
       len = keyArr.length
     if(len > 1) {
       let i = -1, tmp = null
