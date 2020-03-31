@@ -14,3 +14,9 @@ export const isWindow = (v) => v && v == v.window;
 export const isFalse = v => v === false
 
 export const isTrue = v => v === true
+
+export const noop = () => {}
+
+export const isDocument = (node) => node && node.nodeType === 9;
+
+export const isElement = node => node && node.nodeType === 1

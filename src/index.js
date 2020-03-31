@@ -19,7 +19,7 @@ export {store, $, swipe}
 
 // export { default as type } from './type';
 
-import S from "./Y/core"
+import S from "./Y/core1"
 export { S }
 
 /**
