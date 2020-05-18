@@ -22,3 +22,44 @@ const obj = {
 
 Object.setPrototypeOf(obj, proto);
 obj.find() // "hello"
+
+
+
+
+const isPlainObject = v => (!!v && typeof v === 'object' && (v.__proto__ === null || v.__proto__ === Object.prototype));
+
+// isPlainObject(null) === false
+// isPlainObject('hello world') === false
+// isPlainObject([]) === false
+// isPlainObject(Object.create(null)) === false
+// isPlainObject(function() {}) === false
+
+// isPlainObject({}) === true
+// isPlainObject({ a: '1', b: '2' }) === true
+
+
+const isEmpty = obj => Object.keys(obj).length === 0 && obj.constructor === Object;
+
+// Or
+const isEmpty = obj => JSON.stringify(obj) === '{}';
+
+
+const getValue = (path, obj) => path.split('.').reduce((acc, c) => acc && acc[c], obj);
+
+// Example
+// getValue('a.b', { a: { b: 'Hello World' } });   // 'Hello World';
+
+
+
+const omit = (obj, keys) => Object.keys(obj).filter(k => !keys.includes(k)).reduce((res, k) => Object.assign(res, {[k]: obj[k]}), {});
+
+// Example
+// omit({a: '1', b: '2', c: '3'}, ['a', 'b']);     // returns { c: '3' }
+
+
+
+
+const pick = (obj, keys) => Object.keys(obj).filter(k => keys.includes(k)).reduce((res, k) => Object.assign(res, {[k]: obj[k]}), {});
+
+// Example
+pick({ a: '1', b: '2', c: '3' }, ['a', 'b']);   // returns { a: '1', b: '2' }

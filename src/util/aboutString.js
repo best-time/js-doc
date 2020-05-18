@@ -77,3 +77,30 @@ function tag(stringArr, value1, value2){
 function tag(stringArr, ...values){
   // ...
 }
+
+// 首字母大写
+const capitalize = str => `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+
+
+const toCamelCase = str => str.trim().replace(/[-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+
+/*
+// Examples
+toCamelCase('background-color');            // backgroundColor
+toCamelCase('-webkit-scrollbar-thumb');     // WebkitScrollbarThumb
+toCamelCase('_hello_world');                // HelloWorld
+toCamelCase('hello_world');                 // helloWorld
+*/
+
+const generateString = (length, chars) => Array(length).fill('').map((v) => chars[Math.floor(Math.random() * chars.length)]).join('');
+// generateString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+
+const generateString = length => Array(length).fill('').map((v) => Math.random().toString(36).charAt(2)).join('');
+
+// 获取字节长度
+const bytes = str => new Blob([str]).size;
+
+const repeat = (str, numberOfTimes) => str.repeat(numberOfTimes);
+
+// Or
+const repeat = (str, numberOfTimes) => Array(numberOfTimes).join(str);

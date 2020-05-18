@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="box">
+    <p class="p1">第一行</p>
+    <p class="p2">第一2行<span>span标签</span></p>
+  </div>
+  <script src="./src/util/selector.js"></script>
+  <script>
+var bbo = document.getElementById('box')
+var tar = bonzo(bbo)
+tar.hide()
+  .addClass('foo')
+  .append('<p>the happs</p>')
+  .css({
+    color: 'red',
+    'background-color': 'blue'
+  })
+  .show()
+// bonzo(bbo)
+//   .hide()
+//   .addClass('foo')
+//   .append('<p>the happs</p>')
+//   .css({
+//     color: 'red',
+//     'background-color': 'blue'
+//   })
+//   .show()
+  </script>
+</body>
+</html>
