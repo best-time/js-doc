@@ -63,3 +63,26 @@ const pick = (obj, keys) => Object.keys(obj).filter(k => keys.includes(k)).reduc
 
 // Example
 pick({ a: '1', b: '2', c: '3' }, ['a', 'b']);   // returns { a: '1', b: '2' }
+
+
+const filterObj = (object, predicate) => {
+  const result = {}
+  const isArray = Array.isArray(predicate)
+  for(const [key, value] of Object.entries(object)) {
+    if(isArray ? predicate.includes(key) : predicate(key, value, object)) {
+      result[key] = value
+    }
+  }
+  return result
+}
+
+var object = {
+	foo: true,
+	bar: false
+};
+
+const newObject = filterObject(object, (key, value) => value === true);
+//=> {foo: true}
+
+const newObject2 = filterObject(object, ['bar']);
+//=> {bar: false}

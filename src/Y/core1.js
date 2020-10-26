@@ -327,7 +327,7 @@ S.ready = fn => {
       false
     );
   }
-  return this;
+  // return this;
 };
 
 function bindFn(r, fn, obj) {

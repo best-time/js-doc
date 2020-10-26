@@ -3,6 +3,9 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 // import { uglify } from 'rollup-plugin-uglify';
 
+import serve from 'rollup-plugin-serve';
+import livereload from 'rollup-plugin-livereload';
+
 import { version } from './package.json';
 
 /**
@@ -69,6 +72,14 @@ export default {
       exclude: 'node_modules/**'
     }),
     json(),
+    livereload(),
+    // 本地服务器
+    serve({
+    open: true, // 自动打开页面
+    port: 3000,
+    openPage: '/public/index.html', // 打开的页面
+    contentBase: ''
+    })
     // uglify()
   ],
   watch: {

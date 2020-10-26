@@ -95,3 +95,14 @@ const easeInOutSine = t => (1 + Math.sin(Math.PI * t - Math.PI / 2)) / 2;
 const easeInElastic = t => (.04 - .04 / t) * Math.sin(25 * t) + 1;
 const easeOutElastic = t => .04 * t / (--t) * Math.sin(25 * t);
 const easeInOutElastic = t => (t -= .5) < 0 ? (.02 + .01 / t) * Math.sin(50 * t) : (.02 - .01 / t) * Math.sin(50 * t) + 1;
+
+
+// 假设有一个被业务广泛使用的函数，我们是否能够在既不更改调用它的业务代码，
+// 也不更改该函数源码的前提下，在其执行前后注入一段我们自定义的逻辑呢
+function withHookAfter (originalFn, hookFn) {
+    return function () {
+      var output = originalFn.apply(this, arguments)
+      hookFn.apply(this, arguments)
+      return output
+    }
+  }

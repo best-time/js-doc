@@ -1,6 +1,6 @@
 import { run, debounce, throttle, memory, proxy, EventEmitter, deepCopy } from './lib'
 import { version } from '../package.json';
-// console.log('version ' + version);
+console.log('version ' + version);
 // export default function () {
 //   console.log('version ' + version);
 // }
@@ -9,6 +9,11 @@ import store from './util/store'
 import $ from './util/dm'
 // import swipe from './util/swipe'
 import swipe from './util/nSwipe'
+
+//---------------------------------------------------------
+
+import {ts} from './util/aboutDate.js'
+export { ts }
 
 export { default as tool } from './internal/_tool';
 export { default as isArray } from './internal/_isArray'
@@ -19,8 +24,8 @@ export {store, $, swipe}
 
 // export { default as type } from './type';
 
-import S from "./Y/core1"
-export { S }
+// import S from "./Y/core1"
+// export { S }
 
 /**
  Bad:
@@ -146,3 +151,7 @@ function delayed () {
 
 
 export {adapter, delay, defer, delayed}
+
+
+
+

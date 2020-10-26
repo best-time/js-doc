@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>js函数式-基础</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-size: 24;
+      font-family: sans-serif
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <p>functional</p> -->
+  <div id="main" class="main">
+    <div class="box1" name="123">
+      <p class="p1">p111111111</p>
+      <p class="p2">p222222222</p>
+    </div>
+    <!-- <h3>123123</h3> -->
+    <i>iiiiiiii图片</i>
+  </div>
+  <div class="box1">
+    <h3>h--333333</h3>
+  </div>
+  <div id="bb">
+    <img id="down1" src="" alt="">
+  </div>
+
+  <!-- <div class="test" id="test">
+      <p>保存图片的区域</p>
+    </div> -->
+  <script src="/dist/bundle.js"></script>
+
+  <script>
+    function nodeType(t) {
+      return (n) => {
+        return n - t === 0
+      }
+    }
+    var isElement = nodeType(1)
+    var isTextNode = nodeType(3)
+    var isElement = nodeType(8)
+    var arrayLikeToArray = nodeLike => ([]).slice.call(nodeLike)
+    var main = document.getElementById("main")
+    var mainChildren = main.childNodes; // 包括空白节点
+    // console.log(mainChildren)
+    ([]).slice.call(mainChildren).map(node => {
+      // console.log(node, node.nodeType)
+      console.log(node.attributes)
+    })
+  </script>
+</body>
+
+</html>
