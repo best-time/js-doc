@@ -106,3 +106,94 @@ function withHookAfter (originalFn, hookFn) {
       return output
     }
   }
+
+
+  function makeMap (str, expectsLowerCase) {
+    // 构建闭包集合map
+    var map = Object.create(null);
+    var list = str.split(',');
+    for (var i = 0; i < list.length; i++) {
+      map[list[i]] = true;
+    }
+    return expectsLowerCase
+      ? function (val) { return map[val.toLowerCase()]; }
+      : function (val) { return map[val]; }
+}
+// 利用闭包，每次判断是否是内置标签只需调用isHTMLTag
+var isHTMLTag = makeMap('html,body,base,head,link,meta,style,title')
+console.log('res', isHTMLTag('body')) // true
+
+
+
+
+
+  // 继承方法
+  function inheritPrototype(Son, Father) {
+    var prototype = Object.create(Father.prototype)
+    prototype.constructor = Son
+    // 把Father.prototype赋值给 Son.prototype
+    Son.prototype = prototype
+  }
+  function Father(name) {
+    this.name = name
+    this.arr = [1,2,3]
+  }
+  Father.prototype.getName = function() {
+    console.log(this.name)
+  }
+
+  function Son(name, age) {
+    Father.call(this, name)
+    this.age = age
+  }
+  inheritPrototype(Son, Father)
+  Son.prototype.getAge = function() {
+    console.log(this.age)
+  }
+
+
+ //  浅拷贝
+  function looseEqual (a, b) {
+    if (a === b) {
+      return true
+    }
+    var isObjectA = isObject(a);
+    var isObjectB = isObject(b);
+    if (isObjectA && isObjectB) {
+      try {
+        var isArrayA = Array.isArray(a);
+        var isArrayB = Array.isArray(b);
+        if (isArrayA && isArrayB) {
+          return a.length === b.length && a.every(function (e, i) {
+            return looseEqual(e, b[i])
+          })
+        } else if (!isArrayA && !isArrayB) {
+          var keysA = Object.keys(a);
+          var keysB = Object.keys(b);
+          return keysA.length === keysB.length && keysA.every(function (key) {
+            return looseEqual(a[key], b[key])
+          })
+        } else {
+          /* istanbul ignore next */
+          return false
+        }
+      } catch (e) {
+        /* istanbul ignore next */
+        return false
+      }
+    } else if (!isObjectA && !isObjectB) {
+      return String(a) === String(b)
+    } else {
+      return false
+    }
+  }
+  function isObject (obj) {
+    return obj !== null && typeof obj === 'object'
+  }
+
+
+  function almostEqual(numOne, numTwo) {
+    return Math.abs( numOne - numTwo ) < Number.EPSILON;
+  }
+  console.log(almostEqual(0.1 + 0.2, 0.3));
+

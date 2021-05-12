@@ -48,5 +48,37 @@
     <br>
     <span>123123</span>
     <script src="js/prac.js"></script>
+
+    <script>
+        let a = 1
+        function shellSort(arr) {
+            debugger
+            const len = arr.length;
+            let gap = Math.floor(len / 2);
+
+            while (gap > 0) {
+                // gap距离
+                for (let i = gap; i < len; i++) {
+                    console.log(i, 'iiiii')
+                    const temp = arr[i];
+                    let preIndex = i - gap;
+
+                    while (preIndex >=0 && arr[preIndex] > temp) {
+                        arr[preIndex + gap] = arr[preIndex];
+                        preIndex -= gap;
+                    }
+                    arr[preIndex + gap] = temp;
+                    // console.log(arr, 'arr')
+                }
+                gap = Math.floor(gap / 2);
+            }
+
+            return arr;
+        }
+        var arr = [13,5,7,
+                   8, 2,0];
+var res = shellSort(arr);
+console.log(res)
+    </script>
 </body>
 </html>

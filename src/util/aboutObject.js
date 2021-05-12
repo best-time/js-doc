@@ -86,3 +86,18 @@ const newObject = filterObject(object, (key, value) => value === true);
 
 const newObject2 = filterObject(object, ['bar']);
 //=> {bar: false}
+
+
+
+const pluckDeep = key => {
+  return obj => {
+    return key.split('.').reduce((accum, key) => accum[key], obj)
+  }
+}
+// let a = {b: {c:{d: 1}}}
+// console.log(pluckDeep('b.c.d')(a))
+const compose = (...fns) => {
+  return res => {
+    return fns.reduce((accum, next) => next(accum), res)
+  }
+}

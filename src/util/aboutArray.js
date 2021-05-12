@@ -190,3 +190,37 @@ const chunk = (arr, size) => arr.reduce((acc, e, i) => (i % size ? acc[acc.lengt
 // Example
 chunk([1, 2, 3, 4, 5, 6, 7, 8], 3);     // returns [[1, 2, 3], [4, 5, 6], [7, 8]]
 chunk([1, 2, 3, 4, 5, 6, 7, 8], 4);     // returns [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+
+// 数组扁平化
+// 先看lodash中的flatten
+// _.flatten([1, [2, [3, [4]], 5]])
+// 得到结果为  [1, 2, [3, [4]], 5]
+
+// vue中
+function simpleNormalizeChildren (children) {
+  for (var i = 0; i < children.length; i++) {
+    if (Array.isArray(children[i])) {
+      return Array.prototype.concat.apply([], children)
+    }
+  }
+  return children
+}
+
+// es6中 等价于
+function simpleNormalizeChildren (children) {
+   return [].concat(...children)
+}
+
+
+
+ // 重写push等方法，然后再把原型指回原方法
+ var ARRAY_METHOD = [ 'push', 'pop', 'shift', 'unshift', 'reverse',  'sort', 'splice' ];
+ var array_methods = Object.create(Array.prototype);
+ ARRAY_METHOD.forEach(method => {
+   array_methods[method] = function () {
+     // 拦截方法
+     console.log('调用的是拦截的 ' + method + ' 方法，进行依赖收集');
+     return Array.prototype[method].apply(this, arguments);
+   }
+ });
